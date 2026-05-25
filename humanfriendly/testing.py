@@ -540,17 +540,11 @@ class MockedProgram(CustomSearchPath):
         :raises: :exc:`~exceptions.AssertionError` when
                  the mock program hasn't been run.
         """
-        # This used to be a `return' statement in a `finally' block, which
-        # discards any exception raised by the assertion (and triggers a
-        # SyntaxWarning on Python 3.14 and newer). The observable behavior
-        # is preserved on purpose, changing it is a separate decision:
-        # https://github.com/xolox/python-humanfriendly/pull/80
         try:
             assert self.program_signal_file and os.path.isfile(self.program_signal_file), \
                 ("It looks like %r was never run!" % self.program_name)
-        except BaseException:
-            pass
-        return super(MockedProgram, self).__exit__(*args, **kw)
+        finally:
+            super(MockedProgram, self).__exit__(*args, **kw)
 
 
 class CaptureOutput(ContextManager):
