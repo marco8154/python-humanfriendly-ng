@@ -11,6 +11,12 @@ permissions:
 env:
   FORCE_COLOR: 1
 
+# The test suite expects a POSIX like environment (for example $HOME). On
+# Windows the default shell is PowerShell, where $HOME isn't set.
+defaults:
+  run:
+    shell: bash
+
 jobs:
   test:
     name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
