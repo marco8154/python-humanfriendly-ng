@@ -1,11 +1,8 @@
 humanfriendly: Human friendly input/output in Python
 ====================================================
 
-.. image:: https://github.com/xolox/python-humanfriendly/actions/workflows/test.yml/badge.svg?branch=master
-   :target: https://github.com/xolox/python-humanfriendly/actions
-
-.. image:: https://codecov.io/gh/xolox/python-humanfriendly/branch/master/graph/badge.svg?token=jYaj4T74TU
-   :target: https://codecov.io/gh/xolox/python-humanfriendly
+.. image:: https://github.com/marco8154/python-humanfriendly-ng/actions/workflows/test.yml/badge.svg?branch=master
+   :target: https://github.com/marco8154/python-humanfriendly-ng/actions
 
 The functions and classes in the `humanfriendly` package can be used to make
 text interfaces more user friendly. Some example features:
@@ -29,6 +26,35 @@ you may encounter some rough edges.
 
 .. contents::
    :local:
+
+Maintenance status
+------------------
+
+This is a continuation of ``humanfriendly``, originally written by Peter Odding
+(`@xolox <https://github.com/xolox>`_), whose last release was 10.0 in 2021.
+The original author is not involved in this continuation. Should he return or
+want the project back, it will be handed over.
+
+This continuation is **maintained by one person with AI agents, without
+independent review**. In practice that means:
+
+- Changes are written and checked with the help of AI coding agents. A second
+  AI model is used as an additional check. That is a tool, not an independent
+  human review.
+- There is no second maintainer who reads every change before a release.
+- The goal is to keep the package working on current Python versions. The API
+  and behaviour are meant to stay the same. Licence (MIT) and copyright are
+  unchanged.
+- Releases are built by GitHub Actions and published to PyPI through Trusted
+  Publishing, so every release can be traced to a tagged commit.
+
+Install it with ``pip install humanfriendly-ng``. The import name is unchanged
+(``import humanfriendly``), so do not install it next to the original
+``humanfriendly`` distribution: both ship the same files and would overwrite
+each other.
+
+If you depend on this package in production, please pin a version and read the
+changelog before upgrading. Reviews, bug reports and co-maintainers are welcome.
 
 Getting started
 ---------------
@@ -144,8 +170,8 @@ Contact
 
 The latest version of `humanfriendly` is available on PyPI_ and GitHub_. The
 documentation is hosted on `Read the Docs`_ and includes a changelog_. For bug
-reports please create an issue on GitHub_. If you have questions, suggestions,
-etc. feel free to send me an e-mail at `peter@peterodding.com`_.
+reports please create an issue on GitHub_. Please do not contact the
+original author about problems with this continuation.
 
 License
 -------
@@ -162,9 +188,8 @@ This software is licensed under the `MIT license`_.
 .. _changelog: https://humanfriendly.readthedocs.io/en/latest/changelog.html
 .. _colorama: https://pypi.org/project/colorama
 .. _format_size(): https://humanfriendly.readthedocs.io/en/latest/#humanfriendly.format_size
-.. _GitHub: https://github.com/xolox/python-humanfriendly
+.. _GitHub: https://github.com/marco8154/python-humanfriendly-ng
 .. _MIT license: https://en.wikipedia.org/wiki/MIT_License
 .. _parse_size(): https://humanfriendly.readthedocs.io/en/latest/#humanfriendly.parse_size
-.. _peter@peterodding.com: peter@peterodding.com
-.. _PyPI: https://pypi.org/project/humanfriendly
+.. _PyPI: https://pypi.org/project/humanfriendly-ng
 .. _Read the Docs: https://humanfriendly.readthedocs.io

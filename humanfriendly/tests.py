@@ -46,7 +46,7 @@ from humanfriendly import (
 )
 from humanfriendly.case import CaseInsensitiveDict, CaseInsensitiveKey
 from humanfriendly.cli import main
-from humanfriendly.compat import StringIO
+from humanfriendly.compat import StringIO, on_windows
 from humanfriendly.decorators import cached
 from humanfriendly.deprecation import DeprecationProxy, define_aliases, deprecated_args, get_aliases
 from humanfriendly.prompts import (
@@ -235,6 +235,7 @@ class HumanFriendlyTestCase(TestCase):
         with self.assertRaises(CallableTimedOut):
             retry(lambda: False, timeout=1)
 
+    @unittest.skipIf(on_windows(), "requires a POSIX shell")
     def test_mocked_program(self):
         """Test :class:`humanfriendly.testing.MockedProgram`."""
         name = random_string()
@@ -1094,6 +1095,7 @@ class HumanFriendlyTestCase(TestCase):
             self.assertEqual([], capturer.stdout.get_lines())
             self.assertEqual([text], capturer.stderr.get_lines())
 
+    @unittest.skipIf(on_windows(), "requires pseudo terminals (the capturer package)")
     def test_generate_warning(self):
         """Test the :func:`humanfriendly.terminal.warning()` function."""
         from capturer import CaptureOutput
@@ -1171,6 +1173,7 @@ class HumanFriendlyTestCase(TestCase):
             sys.stdout = saved_stdout
             sys.stderr = saved_stderr
 
+    @unittest.skipIf(on_windows(), "requires pseudo terminals (the capturer package)")
     def test_terminal_capabilities(self):
         """Test the functions that check for terminal capabilities."""
         from capturer import CaptureOutput
