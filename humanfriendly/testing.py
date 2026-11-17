@@ -30,11 +30,7 @@ import sys
 import tempfile
 import time
 import unittest
-
-try:
-    from shlex import quote  # Python 3
-except ImportError:
-    from pipes import quote  # Python 2 (removed in 3.13)
+from shlex import quote
 
 # Modules included in our package.
 from humanfriendly.compat import StringIO
@@ -539,11 +535,17 @@ class MockedProgram(CustomSearchPath):
         :raises: :exc:`~exceptions.AssertionError` when
                  the mock program hasn't been run.
         """
+        # This used to be a `return' statement in a `finally' block, which
+        # discards any exception raised by the assertion (and triggers a
+        # SyntaxWarning on Python 3.14 and newer). The observable behavior
+        # is preserved on purpose, changing it is a separate decision:
+        # https://github.com/xolox/python-humanfriendly/pull/80
         try:
             assert self.program_signal_file and os.path.isfile(self.program_signal_file), \
                 ("It looks like %r was never run!" % self.program_name)
-        finally:
-            return super(MockedProgram, self).__exit__(*args, **kw)
+        except BaseException:
+            pass
+        return super(MockedProgram, self).__exit__(*args, **kw)
 
 
 class CaptureOutput(ContextManager):

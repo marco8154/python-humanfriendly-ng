@@ -123,7 +123,7 @@ from humanfriendly.usage import (
 )
 
 # Test dependencies.
-from mock import MagicMock
+from unittest.mock import MagicMock
 
 
 class HumanFriendlyTestCase(TestCase):

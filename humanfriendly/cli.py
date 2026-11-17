@@ -81,11 +81,7 @@ import functools
 import getopt
 import subprocess
 import sys
-
-try:
-    from shlex import quote  # Python 3
-except ImportError:
-    from pipes import quote  # Python 2 (removed in 3.13)
+from shlex import quote
 
 # Modules included in our package.
 from humanfriendly import (
