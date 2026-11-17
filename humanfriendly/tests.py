@@ -948,8 +948,12 @@ class HumanFriendlyTestCase(TestCase):
         assert int(output) == parse_length('5 km')
         returncode, output = run_cli(main, '--parse-length=1.05 km')
         assert float(output) == parse_length('1.05 km')
-        # Test `humanfriendly --run-command'.
-        returncode, output = run_cli(main, '--run-command', 'bash', '-c', 'sleep 2 && exit 42')
+        # Test `humanfriendly --run-command'. The Python interpreter is used as the
+        # command because a working `bash' isn't a given (on Windows `bash.exe'
+        # may be the launcher of the Windows Subsystem for Linux).
+        returncode, output = run_cli(
+            main, '--run-command', sys.executable, '-c', 'import sys, time; time.sleep(2); sys.exit(42)',
+        )
         assert returncode == 42
         # Test `humanfriendly --demo'. The purpose of this test is
         # to ensure that the demo runs successfully on all versions
