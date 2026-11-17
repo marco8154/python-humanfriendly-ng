@@ -55,8 +55,8 @@ jobs:
           set +e
           python -m pytest --timeout=120 -rfEs --color=no | tee pytest.log
           status=${PIPESTATUS[0]}
-          grep -E '^(FAILED|ERROR) ' pytest.log | head -n 8 | sed 's/^/::error title=pytest::/'
-          grep -E '^SKIPPED ' pytest.log | sed -E 's/^SKIPPED \[[0-9]+\] [^:]+:[0-9]+: //' | sort | uniq -c \
+          grep -a -E '^(FAILED|ERROR) ' pytest.log | head -n 8 | sed 's/^/::error title=pytest::/'
+          grep -a -E '^SKIPPED ' pytest.log | sed -E 's/^SKIPPED \[[0-9]+\] [^:]+:[0-9]+: //' | sort | uniq -c \
             | head -n 8 | sed 's/^ */::notice title=skipped::/'
           echo "::notice title=pytest::$(tail -n 1 pytest.log)"
           exit "$status"
