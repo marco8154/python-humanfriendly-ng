@@ -11,6 +11,46 @@ Changelog`_. This project adheres to `semantic versioning`_.
 .. _Keep a Changelog: http://keepachangelog.com/
 .. _semantic versioning: http://semver.org/
 
+`Release 11.0`_ (unreleased)
+----------------------------
+
+This is the first release of the continuation of :pypi:`humanfriendly`, published
+on PyPI as :pypi:`humanfriendly-ng`. The import name is still ``humanfriendly`` and the
+API and behavior are unchanged, so it works as a drop-in replacement. Don't
+install it next to the original distribution: both ship the same files.
+
+The original author Peter Odding is not involved in this continuation. License
+(MIT) and copyright are unchanged. The continuation is maintained by one person
+with AI agents, without independent review (see the readme).
+
+**Noteworthy changes:**
+
+- Restored compatibility with Python 3.13 and newer by replacing the removed
+  ``pipes`` module with ``shlex.quote()``. Before this
+  change the ``humanfriendly`` command and :mod:`humanfriendly.testing` could
+  not be imported (issue `#73`_, pull request `#75`_ by Benjamin A. Beasley).
+
+- Python 3.10 is now the oldest supported version (this is backwards
+  incompatible, which is why the major version number was bumped). Python 3.10
+  up to 3.15 are tested.
+
+- Removed the compatibility code for Python 2 and old Python 3 versions. All
+  names exported by :mod:`humanfriendly.compat` are still available.
+
+**Internal changes:**
+
+- ``MockedProgram.__exit__()`` no longer triggers a ``SyntaxWarning`` on
+  Python 3.14+ (``return`` in a ``finally`` block). Its behavior is unchanged.
+
+- The package is built with ``pyproject.toml``, tested with GitHub Actions on
+  Linux, macOS and Windows and released through PyPI Trusted Publishing.
+
+- The test suite uses ``unittest.mock`` instead of :pypi:`mock`.
+
+.. _#73: https://github.com/xolox/python-humanfriendly/issues/73
+.. _#75: https://github.com/xolox/python-humanfriendly/pull/75
+.. _Release 11.0: https://github.com/marco8154/python-humanfriendly-ng/compare/10.0...11.0
+
 `Release 10.0`_ (2021-09-17)
 ----------------------------
 

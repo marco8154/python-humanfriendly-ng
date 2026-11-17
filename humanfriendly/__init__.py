@@ -1,7 +1,7 @@
 # Human friendly input/output in Python.
 #
 # Author: Peter Odding <peter@peterodding.com>
-# Last Change: September 17, 2021
+# Last Change: November 17, 2026
 # URL: https://humanfriendly.readthedocs.io
 
 """The main module of the `humanfriendly` package."""
@@ -51,7 +51,7 @@ __all__ = (
 )
 
 # Semi-standard module versioning.
-__version__ = '10.0'
+__version__ = '11.0'
 
 # Named tuples to define units of size.
 SizeUnit = collections.namedtuple('SizeUnit', 'divider, symbol, name')
