@@ -48,8 +48,18 @@ jobs:
       - name: Check coding style
         run: flake8
 
+      # The outcome is repeated as annotations so that failed and skipped
+      # tests are visible on the summary page, without opening the log.
       - name: Run the test suite
-        run: python -m pytest --timeout=120
+        run: |
+          set +e
+          python -m pytest --timeout=120 -rfEs --color=no | tee pytest.log
+          status=${PIPESTATUS[0]}
+          grep -E '^(FAILED|ERROR) ' pytest.log | head -n 8 | sed 's/^/::error title=pytest::/'
+          grep -E '^SKIPPED ' pytest.log | sed -E 's/^SKIPPED \[[0-9]+\] [^:]+:[0-9]+: //' | sort | uniq -c \
+            | head -n 8 | sed 's/^ */::notice title=skipped::/'
+          echo "::notice title=pytest::$(tail -n 1 pytest.log)"
+          exit "$status"
 
   package:
     name: Build and check the distribution archives
