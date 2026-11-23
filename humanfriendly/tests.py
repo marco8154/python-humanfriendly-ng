@@ -195,6 +195,12 @@ class HumanFriendlyTestCase(TestCase):
         obj['Existing_Key'] = 11
         assert obj['existing_key'] == 11
 
+    def test_case_insensitive_update_invalid(self):
+        """Reject unsupported update sources with TypeError."""
+        obj = CaseInsensitiveDict()
+        self.assertRaises(TypeError, obj.update, 42)
+        assert not obj
+
     def test_case_insensitive_key(self):
         """Test the CaseInsensitiveKey class."""
         # Test the __eq__() special method.

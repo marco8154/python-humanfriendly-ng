@@ -93,7 +93,7 @@ class CaseInsensitiveDict(collections.OrderedDict):
         elif other is not None:
             # Complain about unsupported values.
             msg = "'%s' object is not iterable"
-            type_name = type(value).__name__
+            type_name = type(other).__name__
             raise TypeError(msg % type_name)
         # Copy the keyword arguments (if any).
         for key, value in kw.items():
