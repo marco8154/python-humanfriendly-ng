@@ -8,9 +8,12 @@
 
 # Standard library modules.
 import re
+from html.entities import name2codepoint
+from html.parser import HTMLParser
+from io import StringIO
 
 # Modules included in our package.
-from humanfriendly.compat import HTMLParser, StringIO, name2codepoint, unichr
+from humanfriendly.compat import unichr
 from humanfriendly.text import compact_empty_lines
 from humanfriendly.terminal import ANSI_COLOR_CODES, ANSI_RESET, ansi_style
 

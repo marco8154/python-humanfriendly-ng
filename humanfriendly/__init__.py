@@ -15,9 +15,10 @@ import os
 import os.path
 import re
 import time
+from time import monotonic
 
 # Modules included in our package.
-from humanfriendly.compat import is_string, monotonic
+from humanfriendly.compat import is_string
 from humanfriendly.deprecation import define_aliases
 from humanfriendly.text import concatenate, format, pluralize, tokenize
 

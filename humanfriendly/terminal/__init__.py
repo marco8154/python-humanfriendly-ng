@@ -29,6 +29,7 @@ import platform
 import re
 import subprocess
 import sys
+from shutil import which
 
 # The `fcntl' module is platform specific so importing it may give an error. We
 # hide this implementation detail from callers by handling the import error and
@@ -42,7 +43,7 @@ except ImportError:
     HAVE_IOCTL = False
 
 # Modules included in our package.
-from humanfriendly.compat import coerce_string, is_unicode, on_windows, which
+from humanfriendly.compat import coerce_string, is_unicode, on_windows
 from humanfriendly.decorators import cached
 from humanfriendly.deprecation import define_aliases
 from humanfriendly.text import concatenate, format

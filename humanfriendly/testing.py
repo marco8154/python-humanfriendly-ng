@@ -31,9 +31,9 @@ import tempfile
 import time
 import unittest
 from shlex import quote
+from io import StringIO
 
 # Modules included in our package.
-from humanfriendly.compat import StringIO
 from humanfriendly.text import random_string
 
 # Initialize a logger for this module.

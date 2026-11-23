@@ -21,6 +21,7 @@ import time
 import types
 import unittest
 import warnings
+from io import StringIO
 
 # Modules included in our package.
 from humanfriendly import (
@@ -46,7 +47,7 @@ from humanfriendly import (
 )
 from humanfriendly.case import CaseInsensitiveDict, CaseInsensitiveKey
 from humanfriendly.cli import main
-from humanfriendly.compat import StringIO, on_windows
+from humanfriendly.compat import on_windows
 from humanfriendly.decorators import cached
 from humanfriendly.deprecation import DeprecationProxy, define_aliases, deprecated_args, get_aliases
 from humanfriendly.prompts import (
