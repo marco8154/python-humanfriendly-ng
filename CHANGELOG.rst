@@ -11,6 +11,47 @@ Changelog`_. This project adheres to `semantic versioning`_.
 .. _Keep a Changelog: http://keepachangelog.com/
 .. _semantic versioning: http://semver.org/
 
+`Release 11.1`_ (unreleased)
+---------------------------
+
+Bug fixes from pull requests to the original repository, taken over with
+their authorship (numbers refer to ``xolox/python-humanfriendly``). Each fix
+comes with a test. Most of them change output that was wrong before:
+
+- :func:`.format_size()` and :func:`.format_length()` no longer show a value
+  that rounds up to the next unit in the smaller unit (#82 by patchwright,
+  #88 by machines-6657).
+- :func:`.format_number()` no longer produces bogus output for integers of
+  10**16 and larger (#83 by Vincent Gao).
+- :func:`.format_timespan()` with ``detailed=True`` shows one minus sign for
+  negative values instead of one per unit (#91 by ApparentlyTejas).
+- :func:`~humanfriendly.text.concatenate()` with ``serial_comma=True`` doesn't
+  add a comma when joining only two items (#84 by oyeong011).
+- :func:`~humanfriendly.text.join_lines()` handles consecutive short lines and
+  CRLF line endings (#103 by Shahadat Islam Koyel).
+- :func:`~humanfriendly.text.generate_slug()` keeps content when a custom
+  delimiter is used (#94 by Shahadat Islam Koyel).
+- :func:`~humanfriendly.terminal.ansi_style()` uses code 48 instead of 39 for
+  256-color backgrounds (#72 by Timothe Jost).
+- :func:`~humanfriendly.terminal.html.html_to_ansi()`: CSS shorthand hex
+  colors like ``#fff`` are expanded (#92), link text is captured per anchor so
+  ``<a>text</a>`` no longer raises :exc:`TypeError` (#93), and pending text is
+  flushed before styles are reset (#95), all by Shahadat Islam Koyel.
+- :func:`~humanfriendly.terminal.clean_terminal_output()` keeps the prefix and
+  cursor position when cleaning erase-right sequences (#106 by Kulraj).
+- :func:`~humanfriendly.tables.format_robust_table()` renders empty tables
+  instead of raising :exc:`ValueError` (#97 by Shahadat Islam Koyel).
+- :class:`~humanfriendly.case.CaseInsensitiveDict` keeps comparisons and
+  ordering case insensitive (#99), and ``update(42)`` raises :exc:`TypeError`
+  instead of :exc:`UnboundLocalError` (from #96), both by Shahadat Islam Koyel.
+- :class:`~humanfriendly.terminal.spinners.Spinner` paces redraws with a
+  monotonic clock, and :meth:`~humanfriendly.terminal.spinners.Spinner.sleep()`
+  waits for the configured interval as documented instead of always 0.2
+  seconds (#101 by Shahadat Islam Koyel).
+- The test suite no longer imports ``setup`` (#65 by Steve Kowalik).
+
+.. _Release 11.1: https://github.com/marco8154/python-humanfriendly-ng/compare/11.0...11.1
+
 `Release 11.0`_ (2026-11-23)
 ----------------------------
 
