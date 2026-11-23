@@ -1,8 +1,7 @@
 # Test suite requirements.
-# The three packages test each other. Until the continued versions are on
-# PyPI they are installed from the default branch of their repositories.
-capturer-ng @ git+https://github.com/marco8154/python-capturer-ng@master
-coloredlogs-ng @ git+https://github.com/marco8154/python-coloredlogs-ng@master
+# The three packages test each other.
+capturer-ng >= 4.0
+coloredlogs-ng >= 16.0
 docutils >= 0.15
 pytest >= 3.0.7
 pytest-cov >= 2.4.0
