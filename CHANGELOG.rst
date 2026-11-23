@@ -32,7 +32,9 @@ comes with a test. Most of them change output that was wrong before:
 - :func:`~humanfriendly.text.generate_slug()` keeps content when a custom
   delimiter is used (#94 by Shahadat Islam Koyel).
 - :func:`~humanfriendly.terminal.ansi_style()` uses code 48 instead of 39 for
-  256-color backgrounds (#72 by Timothe Jost).
+  256-color backgrounds (#72 by Timothe Jost). The HTML converter of
+  coloredlogs-ng reads the correct code from 16.1 on; older versions turn such
+  backgrounds into plain text.
 - :func:`~humanfriendly.terminal.html.html_to_ansi()`: CSS shorthand hex
   colors like ``#fff`` are expanded (#92), link text is captured per anchor so
   ``<a>text</a>`` no longer raises :exc:`TypeError` (#93), and pending text is
