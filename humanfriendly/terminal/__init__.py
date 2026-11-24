@@ -481,12 +481,20 @@ def find_terminal_size():
 
     :returns: A tuple of two integers with the line and column count.
 
-    The result of this function is based on the first of the following three
+    The result of this function is based on the first of the following four
     methods that works:
 
     1. First :func:`find_terminal_size_using_ioctl()` is tried,
-    2. then :func:`find_terminal_size_using_stty()` is tried,
-    3. finally :data:`DEFAULT_LINES` and :data:`DEFAULT_COLUMNS` are returned.
+    2. then :func:`os.get_terminal_size()` is tried for the standard file
+       descriptors (this is the method that works in a Windows console),
+    3. then :func:`find_terminal_size_using_stty()` is tried,
+    4. finally :data:`DEFAULT_LINES` and :data:`DEFAULT_COLUMNS` are returned.
+
+    The third method starts an external program, which is slow compared to the
+    other methods. Outside of Windows it is skipped when the standard input
+    isn't a terminal, because :man:`stty` inspects its standard input and can't
+    succeed then. On Windows it is always tried, because a native Python sees
+    the terminals of MSYS2 and Git Bash as pipes.
 
     .. note:: The :func:`find_terminal_size()` function performs the steps
               above every time it is called, the result is not cached. This is
@@ -512,8 +520,19 @@ def find_terminal_size():
                 return result
         except Exception:
             pass
-    # The second method.
+    # The second method: ask the operating system directly. This works in a
+    # Windows console, and when the sys.* stream objects were replaced.
+    for fd in 0, 1, 2:
+        try:
+            columns, lines = os.get_terminal_size(fd)
+            if min(lines, columns) >= 1:
+                return lines, columns
+        except Exception:
+            pass
+    # The third method.
     try:
+        if not on_windows() and not os.isatty(0):
+            raise Exception("The standard input is not a terminal!")
         result = find_terminal_size_using_stty()
         if min(result) >= 1:
             return result

@@ -60,6 +60,18 @@ comes with a test. Most of them change output that was wrong before:
   seconds (#101 by Shahadat Islam Koyel).
 - The test suite no longer imports ``setup`` (#65 by Steve Kowalik).
 
+**Performance:**
+
+- :func:`~humanfriendly.terminal.find_terminal_size()` asks the operating
+  system (:func:`os.get_terminal_size()`) before it starts the ``stty``
+  program, and outside of Windows it no longer starts ``stty`` when the
+  standard input isn't a terminal, because that can't succeed. The result is
+  the same; in a Windows console a lookup takes well under a millisecond
+  instead of tens of milliseconds, which is what made
+  :func:`~humanfriendly.tables.format_smart_table()` slow there. With all
+  streams redirected on Windows ``stty`` is still tried, because that is the
+  only way to find the size of an MSYS2 or Git Bash terminal.
+
 .. _Release 11.1: https://github.com/marco8154/python-humanfriendly-ng/compare/11.0...11.1
 
 `Release 11.0`_ (2026-11-23)

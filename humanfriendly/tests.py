@@ -77,6 +77,8 @@ from humanfriendly.terminal import (
     ANSI_RESET,
     ANSI_SGR,
     ANSI_SHOW_CURSOR,
+    DEFAULT_COLUMNS,
+    DEFAULT_LINES,
     ansi_strip,
     ansi_style,
     ansi_width,
@@ -1355,6 +1357,37 @@ class HumanFriendlyTestCase(TestCase):
         """Erasing from column zero must still clear the entire line."""
         for erase in (ANSI_ERASE_LINE, ANSI_CSI + '0K'):
             assert clean_terminal_output('old\r' + erase + 'new') == ['new']
+
+    def test_find_terminal_size_without_stty(self):
+        """Make sure :func:`find_terminal_size()` only starts ``stty`` when it can help."""
+        module_globals = find_terminal_size.__globals__
+        calls = []
+
+        def fake_stty():
+            calls.append('stty')
+            return 12, 34
+
+        def no_terminal(fd):
+            raise OSError("not a terminal")
+
+        with PatchedItem(module_globals, 'find_terminal_size_using_stty', fake_stty):
+            with PatchedAttribute(sys, 'stdin', StringIO()):
+                with PatchedAttribute(sys, 'stdout', StringIO()):
+                    with PatchedAttribute(sys, 'stderr', StringIO()):
+                        # The operating system knows the size: no need for stty.
+                        with PatchedAttribute(os, 'get_terminal_size', lambda fd: os.terminal_size((132, 43))):
+                            assert find_terminal_size() == (43, 132)
+                            assert not calls
+                        with PatchedAttribute(os, 'get_terminal_size', no_terminal):
+                            with PatchedAttribute(os, 'isatty', lambda fd: False):
+                                # Outside of Windows stty can't succeed without a terminal on stdin.
+                                with PatchedItem(module_globals, 'on_windows', lambda: False):
+                                    assert find_terminal_size() == (DEFAULT_LINES, DEFAULT_COLUMNS)
+                                    assert not calls
+                                # On Windows stty is still tried (MSYS2 terminals look like pipes).
+                                with PatchedItem(module_globals, 'on_windows', lambda: True):
+                                    assert find_terminal_size() == (12, 34)
+                                    assert calls == ['stty']
 
     def test_find_terminal_size(self):
         """Test :func:`humanfriendly.terminal.find_terminal_size()`."""
