@@ -23,8 +23,12 @@ comes with a test. Most of them change output that was wrong before:
   #88 by machines-6657).
 - :func:`.format_number()` no longer produces bogus output for integers of
   10**16 and larger (#83 by Vincent Gao).
-- :func:`.format_timespan()` with ``detailed=True`` shows one minus sign for
-  negative values instead of one per unit (#91 by ApparentlyTejas).
+- :func:`.format_timespan()` formats negative values like positive ones with
+  a single leading minus sign (#91 by ApparentlyTejas). With ``detailed=True``
+  every unit used to get its own minus sign, followed by "and -0 nanoseconds".
+  Without it negative values were never split into units, so
+  ``format_timespan(-3600)`` now gives ``'-1 hour'`` instead of
+  ``'-3600 seconds'``.
 - :func:`~humanfriendly.text.concatenate()` with ``serial_comma=True`` doesn't
   add a comma when joining only two items (#84 by oyeong011).
 - :func:`~humanfriendly.text.join_lines()` handles consecutive short lines and
@@ -39,8 +43,12 @@ comes with a test. Most of them change output that was wrong before:
   colors like ``#fff`` are expanded (#92), link text is captured per anchor so
   ``<a>text</a>`` no longer raises :exc:`TypeError` (#93), and pending text is
   flushed before styles are reset (#95), all by Shahadat Islam Koyel.
-- :func:`~humanfriendly.terminal.clean_terminal_output()` keeps the prefix and
-  cursor position when cleaning erase-right sequences (#106 by Kulraj).
+- :func:`~humanfriendly.terminal.clean_terminal_output()` treats ``ESC[K`` the
+  way a terminal does: it erases from the cursor to the end of the line and
+  keeps the text before the cursor. It used to drop the whole line, so a line
+  that ended in ``ESC[K`` disappeared from the result. ``ESC[0K`` is recognized
+  as well (#106 by Kulraj). ``capturer`` and the HTML converter of
+  ``coloredlogs`` use this function, so their output changes in the same way.
 - :func:`~humanfriendly.tables.format_robust_table()` renders empty tables
   instead of raising :exc:`ValueError` (#97 by Shahadat Islam Koyel).
 - :class:`~humanfriendly.case.CaseInsensitiveDict` keeps comparisons and
