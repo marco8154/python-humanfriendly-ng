@@ -566,6 +566,17 @@ class HumanFriendlyTestCase(TestCase):
         assert '-30 seconds' == format_timespan(-30, detailed=False)
         assert '-1 hour, 1 minute and 40 seconds' == format_timespan(-3700, detailed=False)
         assert '1 microsecond and 50 nanoseconds' == format_timespan(0.00000105, detailed=True)
+        # A value that rounds up to a whole larger unit is carried over.
+        assert '59.99 seconds' == format_timespan(59.99)
+        assert '1 minute' == format_timespan(59.999)
+        assert '-1 minute' == format_timespan(-59.999)
+        assert '2 minutes' == format_timespan(119.999)
+        assert '1 hour' == format_timespan(3599.9996)
+        assert '1 day' == format_timespan(day - 0.001)
+        assert '1 year' == format_timespan(year - 0.001)
+        assert '59 minutes and 59.99 seconds' == format_timespan(3599.99)
+        assert '1 microsecond' == format_timespan(0.0000009999999, detailed=True)
+        assert '1 second' == format_timespan(0.9999999999, detailed=True)
         # Test the datetime.timedelta support:
         # https://github.com/xolox/python-humanfriendly/issues/27
         now = datetime.datetime.now()

@@ -462,7 +462,7 @@ def format_timespan(num_seconds, detailed=False, max_units=3):
     '1 year, 2 days and 3 hours'
     """
     num_seconds = coerce_seconds(num_seconds)
-    if abs(num_seconds) < 60 and not detailed:
+    if abs(num_seconds) < 60 and not detailed and abs(float(round_number(num_seconds))) < 60:
         # Fast path.
         return pluralize(round_number(num_seconds), 'second')
     else:
@@ -471,6 +471,14 @@ def format_timespan(num_seconds, detailed=False, max_units=3):
         result = []
         num_seconds = decimal.Decimal(str(abs(num_seconds)))
         relevant_units = list(reversed(time_units[0 if detailed else 3:]))
+        # The count of the smallest unit is rounded to two decimals. When that
+        # rounds it up to a whole larger unit (59.999 seconds to 60 seconds)
+        # carry it over, so that the result is '1 minute' and not '60 seconds'.
+        smallest_divider = decimal.Decimal(str(relevant_units[-1]['divider']))
+        larger_divider = decimal.Decimal(str(relevant_units[-2]['divider']))
+        remainder = num_seconds % larger_divider
+        if decimal.Decimal(round_number(remainder / smallest_divider)) >= larger_divider / smallest_divider:
+            num_seconds += larger_divider - remainder
         for unit in relevant_units:
             # Extract the unit count from the remaining time.
             divider = decimal.Decimal(str(unit['divider']))
