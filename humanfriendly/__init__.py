@@ -333,6 +333,13 @@ def parse_length(length):
         # Otherwise we expect to find two tokens: A number and a unit.
         if len(tokens) == 2 and is_string(tokens[1]):
             normalized_unit = tokens[1].lower()
+            # Recognize the names of units that are written out in full. The
+            # prefix matching below would take 'millimetres' for metres
+            # (because it starts with 'm' but not with 'mm') and would not
+            # recognize 'kilometres' at all.
+            for name, prefix in ('nano', 'nm'), ('milli', 'mm'), ('centi', 'cm'), ('kilo', 'km'):
+                if normalized_unit in (name + 'metre', name + 'metres', name + 'meter', name + 'meters'):
+                    normalized_unit = prefix
             # Try to match the first letter of the unit.
             for unit in length_size_units:
                 if normalized_unit.startswith(unit['prefix']):

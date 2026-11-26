@@ -686,6 +686,17 @@ class HumanFriendlyTestCase(TestCase):
         self.assertEqual(1e-02, parse_length('1cm'))
         self.assertEqual(1e-03, parse_length('1mm'))
         self.assertEqual(1e-09, parse_length('1nm'))
+        # Units that are written out in full, in both spellings.
+        self.assertEqual(2, parse_length('2 metres'))
+        self.assertEqual(1, parse_length('1 meter'))
+        self.assertEqual(2e-03, parse_length('2 millimetres'))
+        self.assertEqual(2e-03, parse_length('2 millimeters'))
+        self.assertEqual(1e-03, parse_length('1 Millimetre'))
+        self.assertEqual(3e-02, parse_length('3 centimetres'))
+        self.assertEqual(3e-02, parse_length('3 centimeter'))
+        self.assertEqual(5000, parse_length('5 kilometres'))
+        self.assertEqual(5000, parse_length('5 kilometers'))
+        self.assertEqual(4e-09, parse_length('4 nanometres'))
         with self.assertRaises(InvalidLength):
             parse_length('1z')
         with self.assertRaises(InvalidLength):
