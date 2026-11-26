@@ -576,7 +576,9 @@ class HumanFriendlyTestCase(TestCase):
         assert '1 year' == format_timespan(year - 0.001)
         assert '59 minutes and 59.99 seconds' == format_timespan(3599.99)
         assert '1 microsecond' == format_timespan(0.0000009999999, detailed=True)
-        assert '1 second' == format_timespan(0.9999999999, detailed=True)
+        assert '1 second' == format_timespan(0.999999999999, detailed=True)
+        assert '999 milliseconds, 999 microseconds and 999.9 nanoseconds' == \
+            format_timespan(0.9999999999, detailed=True)
         # Test the datetime.timedelta support:
         # https://github.com/xolox/python-humanfriendly/issues/27
         now = datetime.datetime.now()
