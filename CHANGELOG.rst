@@ -60,6 +60,26 @@ comes with a test. Most of them change output that was wrong before:
   seconds (#101 by Shahadat Islam Koyel).
 - The test suite no longer imports ``setup`` (#65 by Steve Kowalik).
 
+Bug fixes without a pull request, found while preparing this release:
+
+- :func:`.parse_length()` recognizes units that are written out in full, in
+  both spellings (``metre`` and ``meter``). ``parse_length('2 millimetres')``
+  used to return 2 (metres) because the unit was matched by its first letter;
+  it now returns 0.002. ``'5 kilometres'``, ``'3 centimetres'`` and
+  ``'4 nanometres'`` used to raise :exc:`.InvalidLength` and are parsed now.
+- :func:`.format_number()` handles floating point numbers that Python shows
+  in scientific notation (1e16 and larger, smaller than 0.0001):
+  ``format_number(1.5e17)`` gives ``'150,000,000,000,000,000'`` instead of
+  ``'1.5e'``. The fix from #83 covered integers only.
+- :func:`.format_timespan()` carries a count that is rounded up to a whole
+  larger unit: ``format_timespan(59.999)`` gives ``'1 minute'`` instead of
+  ``'60 seconds'``, and 3599.9996 seconds give ``'1 hour'`` instead of
+  ``'59 minutes and 60 seconds'``. Only values within half a hundredth of the
+  smallest unit shown below a whole larger unit are affected. For those the
+  result can get shorter where the excess was cut off before:
+  1814399.999 seconds are now ``'3 weeks'`` instead of
+  ``'2 weeks, 6 days and 23 hours'``.
+
 **Test helpers** (:mod:`humanfriendly.testing`), which other projects use in
 their own test suites:
 
