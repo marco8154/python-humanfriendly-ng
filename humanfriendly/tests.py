@@ -98,6 +98,8 @@ from humanfriendly.terminal.spinners import AutomaticSpinner, Spinner
 from humanfriendly.testing import (
     CallableTimedOut,
     CaptureOutput,
+    CustomSearchPath,
+    MockedHomeDirectory,
     MockedProgram,
     PatchedAttribute,
     PatchedItem,
@@ -320,6 +322,22 @@ class HumanFriendlyTestCase(TestCase):
                 handle.write("Hello world!")
         assert not os.path.exists(temporary_file)
         assert not os.path.exists(directory)
+
+    def test_composed_temporary_directory_cleanup(self):
+        """Test that composed context managers remove their temporary directory."""
+        for context_manager in CustomSearchPath(), CustomSearchPath(isolated=True), MockedHomeDirectory():
+            original_home = os.environ.get('HOME')
+            original_path = os.environ.get('PATH')
+            with context_manager as directory:
+                assert os.path.isdir(directory)
+                # The directory that is passed to the caller is the
+                # one that is actually used (and cleaned up later).
+                assert directory == context_manager.temporary_directory
+                assert directory in (os.environ.get('HOME'), os.environ['PATH'].split(os.pathsep)[0])
+                touch(os.path.join(directory, 'some-file'))
+            assert not os.path.exists(directory)
+            assert os.environ.get('HOME') == original_home
+            assert os.environ.get('PATH') == original_path
 
     def test_touch(self):
         """Test :func:`humanfriendly.testing.touch()`."""

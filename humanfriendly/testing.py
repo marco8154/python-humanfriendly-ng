@@ -378,8 +378,13 @@ class TemporaryDirectory(ContextManager):
         """
         # Enable composition of context managers.
         super(TemporaryDirectory, self).__enter__()
-        # Create the temporary directory.
-        self.temporary_directory = tempfile.mkdtemp(**self.mkdtemp_options)
+        # Create the temporary directory, unless it already exists. Composed
+        # context managers like CustomSearchPath call this method twice: once
+        # directly and once via PatchedItem.__enter__(), which continues along
+        # the method resolution order. Without this check the second call
+        # created a second directory and the first one was never cleaned up.
+        if self.temporary_directory is None:
+            self.temporary_directory = tempfile.mkdtemp(**self.mkdtemp_options)
         return self.temporary_directory
 
     def __exit__(self, exc_type=None, exc_value=None, traceback=None):
