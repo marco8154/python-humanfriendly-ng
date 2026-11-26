@@ -718,6 +718,14 @@ class HumanFriendlyTestCase(TestCase):
         # produces scientific notation that corrupts the output.
         self.assertEqual('10,000,000,000,000,000', format_number(10 ** 16))
         self.assertEqual('1,000,000,000,000,000,000', format_number(10 ** 18))
+        # The same for floating point numbers, large and small.
+        self.assertEqual('10,000,000,000,000,000', format_number(1e16))
+        self.assertEqual('150,000,000,000,000,000', format_number(1.5e17))
+        self.assertEqual('-150,000,000,000,000,000', format_number(-1.5e17))
+        self.assertEqual('9,999,999,999,999,998', format_number(9999999999999998.0))
+        self.assertEqual('0', format_number(0.00001))
+        self.assertEqual('0.00001', format_number(0.00001, 5))
+        self.assertEqual('0.0001', format_number(0.0001, 4))
 
     def test_round_number(self):
         """Test :func:`humanfriendly.round_number()`."""

@@ -373,7 +373,13 @@ def format_number(number, num_decimals=2):
     > print(format_number(6000000000.42, num_decimals=0))
     6,000,000,000
     """
-    integer_part, _, decimal_part = str(float(number)).partition('.')
+    text = str(float(number))
+    if 'e' in text:
+        # Very large and very small floating point numbers are converted to
+        # scientific notation ('1.5e+17', '1e-05'), which the code below
+        # can't handle. Write out the same digits without an exponent.
+        text = '{:f}'.format(decimal.Decimal(text))
+    integer_part, _, decimal_part = text.partition('.')
 
     # Avoid float conversion for integers to prevent bogus output when
     # str(float()) uses scientific notation (numbers >= 10**16).
