@@ -533,18 +533,23 @@ class MockedProgram(CustomSearchPath):
         os.chmod(pathname, 0o755)
         return directory
 
-    def __exit__(self, *args, **kw):
+    def __exit__(self, exc_type=None, exc_value=None, traceback=None):
         """
         Ensure that the mock program was run.
 
         :raises: :exc:`~exceptions.AssertionError` when
                  the mock program hasn't been run.
+
+        The check is skipped when the :keyword:`with` block raised an
+        exception, so that this exception isn't replaced by the
+        :exc:`~exceptions.AssertionError`.
         """
         try:
-            assert self.program_signal_file and os.path.isfile(self.program_signal_file), \
-                ("It looks like %r was never run!" % self.program_name)
+            if exc_type is None:
+                assert self.program_signal_file and os.path.isfile(self.program_signal_file), \
+                    ("It looks like %r was never run!" % self.program_name)
         finally:
-            super(MockedProgram, self).__exit__(*args, **kw)
+            super(MockedProgram, self).__exit__(exc_type, exc_value, traceback)
 
 
 class CaptureOutput(ContextManager):

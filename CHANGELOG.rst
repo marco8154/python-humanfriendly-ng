@@ -60,6 +60,25 @@ comes with a test. Most of them change output that was wrong before:
   seconds (#101 by Shahadat Islam Koyel).
 - The test suite no longer imports ``setup`` (#65 by Steve Kowalik).
 
+**Test helpers** (:mod:`humanfriendly.testing`), which other projects use in
+their own test suites:
+
+- :class:`~humanfriendly.testing.MockedProgram` raises :exc:`AssertionError`
+  when the mocked program was never run, as its documentation always said
+  (#80 by Mirochill). Until now the assertion was silently discarded. **A test
+  that mocks a program without running it passed before and fails now.** That
+  is the purpose of the check, but it can turn a test suite red that was green
+  with 11.0. The check is skipped when the ``with`` block itself raised an
+  exception, so that the actual error isn't replaced by the assertion.
+- :class:`~humanfriendly.testing.CustomSearchPath`,
+  :class:`~humanfriendly.testing.MockedProgram` and
+  :class:`~humanfriendly.testing.MockedHomeDirectory` created two temporary
+  directories and removed only the unused one, so the directory handed to the
+  caller was left behind after every use. They now create one directory and
+  remove it. :meth:`TemporaryDirectory.__enter__()
+  <humanfriendly.testing.TemporaryDirectory.__enter__>` no longer creates a
+  second directory when it's called again before ``__exit__()``.
+
 **Performance:**
 
 - :func:`~humanfriendly.terminal.find_terminal_size()` asks the operating

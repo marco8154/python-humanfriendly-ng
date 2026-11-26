@@ -322,6 +322,15 @@ class HumanFriendlyTestCase(TestCase):
         assert directory is not None
         assert not os.path.exists(directory)
 
+    def test_mocked_program_keeps_exception(self):
+        """Test that :class:`humanfriendly.testing.MockedProgram` doesn't replace an exception from its block."""
+        directory = None
+        with self.assertRaises(ValueError):
+            with MockedProgram(name=random_string()) as directory:
+                raise ValueError("The actual problem")
+        assert directory is not None
+        assert not os.path.exists(directory)
+
     def test_temporary_directory(self):
         """Test :class:`humanfriendly.testing.TemporaryDirectory`."""
         with TemporaryDirectory() as directory:
