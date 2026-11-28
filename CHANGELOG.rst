@@ -11,8 +11,8 @@ Changelog`_. This project adheres to `semantic versioning`_.
 .. _Keep a Changelog: http://keepachangelog.com/
 .. _semantic versioning: http://semver.org/
 
-`Release 11.1`_ (unreleased)
----------------------------
+`Release 11.1`_ (2026-11-28)
+----------------------------
 
 Bug fixes from pull requests to the original repository, taken over with
 their authorship (numbers refer to ``xolox/python-humanfriendly``). Each fix
